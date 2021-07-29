@@ -1,22 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect} from "react";
 import "./styles.css";
-import axios from "axios";
+import {connect} from 'react-redux'
+import { getCountries } from "./actions";
 
-export default function App() {
-  const [countries, setCountries] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("https://restcountries.eu/rest/v2/all")
-      .then(response => setCountries(response.data))
-      .catch(error => console.log({ error }));
-  }, []);
 
+const App=(props) => {
+  
+
+useEffect(() =>{
+
+props.getCountries()
+},[])
+
+
+  
+console.log(props)
   return (
     <div className="App">
-      <h1>React Dersleri</h1>
       <h2>React Router</h2>
-      {countries.map(country => {
+      {props.countries.map(country => {
         return (
           <div key={country.name}>
             <h3>{country.name}</h3>
@@ -34,3 +37,13 @@ export default function App() {
     </div>
   );
 }
+
+
+const mapStateToProps = state =>{
+  return {
+    countries: state.countries
+  }
+}
+
+
+export default connect(mapStateToProps, {getCountries})(App)
